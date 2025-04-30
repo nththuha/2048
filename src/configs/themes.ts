@@ -1,4 +1,5 @@
 import { Button, createTheme, CSSVariablesResolver, MantineThemeOverride } from '@mantine/core'
+import { GAP, WIDTH } from './constant'
 
 export const theme: MantineThemeOverride = createTheme({
   primaryColor: 'primary',
@@ -34,8 +35,8 @@ export const resolver: CSSVariablesResolver = (theme) => ({
     '--secondary-text-color': '#FEF1E8',
     '--label-color': '#EEE3DA',
     '--score-label-color': 'white',
-    '--tile-size': '80px',
-    '--tile-gap': '10px',
+    '--tile-size': `${WIDTH}px`,
+    '--tile-gap': `${GAP}px`,
   },
   light: {
     '--text-color': theme.colors.primary[9],

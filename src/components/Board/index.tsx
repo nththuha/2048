@@ -1,5 +1,6 @@
 import { SIZE } from '@/configs'
-import { use2048Game } from '@/hooks/use2048'
+import { use2048Game } from '@/hooks/use2048Game'
+import { TileProps } from '@/types'
 import Message from '../Message'
 import Tile from '../Tile'
 import classes from './Board.module.scss'
@@ -11,8 +12,8 @@ export default function Board() {
     <div className={classes.container}>
       {(gameOver || won) && <Message />}
       <div className={classes.tiles}>
-        {[].map((_, index) => (
-          <Tile key={index} />
+        {temp.map((tile: TileProps, index) => (
+          <Tile key={index} {...tile} />
         ))}
       </div>
       <div className={classes.grid}>
@@ -23,3 +24,9 @@ export default function Board() {
     </div>
   )
 }
+
+const temp: TileProps[] = [
+  { position: [0, 0], value: 2 },
+  { position: [1, 0], value: 4 },
+  { position: [1, 1], value: 8 },
+]

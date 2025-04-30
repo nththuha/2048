@@ -1,0 +1,19 @@
+.container {
+  position: absolute;
+  width: var(--tile-size);
+  height: var(--tile-size);
+  margin: calc(var(--tile-gap) * 0.5);
+  border-radius: 12px;
+  background: var(--tile-background);
+  transition-property: left, top, transform;
+  transition-duration: 200ms, 200ms, 100ms;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.text {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}

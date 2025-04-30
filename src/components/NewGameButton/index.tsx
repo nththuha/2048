@@ -1,4 +1,4 @@
-import { use2048Game } from '@/hooks/use2048'
+import { use2048Game } from '@/hooks/use2048Game'
 import { Button } from '@mantine/core'
 
 export default function NewGameButton() {

@@ -1,4 +1,4 @@
-import { use2048Game } from '@/hooks/use2048'
+import { use2048Game } from '@/hooks/use2048Game'
 import { Button, Text } from '@mantine/core'
 import classes from './Message.module.scss'
 
