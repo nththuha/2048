@@ -1,0 +1,20 @@
+.itemContainer {
+  background-color: var(--secondary-background);
+  border-radius: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--label-color);
+  line-height: normal;
+}
+
+.score {
+  color: var(--score-label-color);
+  font-weight: bold;
+  font-size: 14px;
+}

@@ -1,0 +1,21 @@
+.container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(252 231 212 / 53%);
+  gap: 30px;
+}
+
+.text {
+  color: #766d65;
+  font-size: 32px;
+  font-weight: bold;
+}
