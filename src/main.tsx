@@ -1,5 +1,4 @@
 import { resolver, theme } from '@/configs'
-import '@/styles/globals.scss'
 import { MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css'
 import React from 'react'
