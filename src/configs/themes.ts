@@ -26,8 +26,18 @@ export const theme: MantineThemeOverride = createTheme({
 })
 
 // https://mantine.dev/styles/css-variables/#css-variables-resolver
-export const resolver: CSSVariablesResolver = () => ({
-  variables: {},
-  light: {},
-  dark: {},
+export const resolver: CSSVariablesResolver = (theme) => ({
+  variables: {
+    '--primary-background': '#FAF8EF',
+    '--secondary-background': '#BBAC9F',
+    '--cell-background': '#CDBFB3',
+    '--secondary-text-color': '#FEF1E8',
+    '--label-color': '#EEE3DA',
+  },
+  light: {
+    '--text-color': theme.colors.primary[9],
+  },
+  dark: {
+    '--text-color': theme.colors.primary[9],
+  },
 })
