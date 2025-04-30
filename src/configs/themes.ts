@@ -33,6 +33,8 @@ export const resolver: CSSVariablesResolver = (theme) => ({
     '--cell-background': '#CDBFB3',
     '--secondary-text-color': '#FEF1E8',
     '--label-color': '#EEE3DA',
+    '--tile-size': '80px',
+    '--tile-gap': '10px',
   },
   light: {
     '--text-color': theme.colors.primary[9],
