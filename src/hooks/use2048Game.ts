@@ -35,8 +35,8 @@ export function use2048Game() {
   const [tiles, setTiles] = useState<Record<string, TileProps>>(initialState.tiles)
   const [score, setScore] = useState(0)
   const [bestScore, setBestScore] = useState(0)
-  const [gameOver, setGameOver] = useState<boolean>(false)
-  const [won, setWon] = useState<boolean>(false)
+  const [gameOver, setGameOver] = useState(false)
+  const [won, setWon] = useState(false)
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
 
   const transpose = useCallback((board: BoardProps) => {
