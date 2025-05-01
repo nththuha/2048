@@ -9,6 +9,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  will-change: transform;
+  transition: none,
 }
 
 .text {
@@ -18,7 +20,7 @@
 }
 
 .merge {
-  animation: mergeAnimation 0.25s ease-in-out;
+  animation: mergeAnimation 0.2s ease-in-out;
 }
 
 @keyframes mergeAnimation {
@@ -32,3 +34,16 @@
     transform: scale(1);
   }
 }
+
+// .appearing {
+//   animation: appearingAnimation 0.2s ease-in-out;
+// }
+
+// @keyframes appearingAnimation {
+//   0% {
+//     transform: scale(0.4);
+//   }
+//   100% {
+//     transform: scale(1);
+//   }
+// }

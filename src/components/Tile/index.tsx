@@ -1,6 +1,7 @@
 import { colors, GAP, WIDTH } from '@/configs'
 import { Position, TileProps } from '@/types'
 import { Text } from '@mantine/core'
+import { useEffect, useRef } from 'react'
 import classes from './Tile.module.scss'
 
 export default function Tile({
@@ -10,30 +11,65 @@ export default function Tile({
   value,
   isMerged = false,
 }: TileProps) {
+  const tileRef = useRef<HTMLDivElement>(null)
+  const animationRef = useRef<number>()
   const positionToPixels = (position: number) => GAP / 2 + position * (WIDTH + GAP)
 
-  const isMoved = !areSamePosition(currentPosition, previousPosition)
+  useEffect(() => {
+    if (!previousPosition || areSamePosition(currentPosition, previousPosition)) {
+      // Không có di chuyển hoặc vị trí không thay đổi
+      return
+    }
 
-  const baseTop = previousPosition
-    ? positionToPixels(previousPosition[0])
-    : positionToPixels(currentPosition[0])
-  const baseLeft = previousPosition
-    ? positionToPixels(previousPosition[1])
-    : positionToPixels(currentPosition[1])
+    const startTop = positionToPixels(previousPosition[0])
+    const startLeft = positionToPixels(previousPosition[1])
+    const endTop = positionToPixels(currentPosition[0])
+    const endLeft = positionToPixels(currentPosition[1])
 
-  const translateY = positionToPixels(currentPosition[0]) - baseTop
-  const translateX = positionToPixels(currentPosition[1]) - baseLeft
+    const duration = 200 // 0.2s
+    let startTime: number | null = null
+
+    const animate = (timestamp: number) => {
+      if (!startTime) {
+        startTime = timestamp
+      }
+      const elapsed = timestamp - startTime
+      const progress = Math.min(elapsed / duration, 1)
+
+      if (tileRef.current) {
+        const currentTop = startTop + (endTop - startTop) * progress
+        const currentLeft = startLeft + (endLeft - startLeft) * progress
+
+        tileRef.current.style.top = `${currentTop}px`
+        tileRef.current.style.left = `${currentLeft}px`
+      }
+
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate)
+      }
+    }
+
+    // Đặt vị trí ban đầu
+    if (tileRef.current) {
+      tileRef.current.style.top = `${startTop}px`
+      tileRef.current.style.left = `${startLeft}px`
+    }
+
+    animationRef.current = requestAnimationFrame(animate)
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+      }
+    }
+  }, [currentPosition, previousPosition])
 
   const containerStyle: React.CSSProperties = {
-    top: baseTop,
-    left: baseLeft,
+    top: positionToPixels(currentPosition[0]),
+    left: positionToPixels(currentPosition[1]),
     zIndex: value,
     backgroundColor: colors[value],
-    transform: isMoved ? `translate(${translateX}px, ${translateY}px)` : 'none',
-    transition: isMoved ? 'transform 5s ease-in-out' : 'none',
   }
-
-  console.log(id, value, previousPosition, currentPosition, isMoved, containerStyle)
 
   const textStyle = {
     color: value && value <= 4 ? 'var(--text-color)' : 'var(--secondary-text-color)',
@@ -41,9 +77,8 @@ export default function Tile({
 
   return (
     <div
-      className={`${classes.container} ${isMerged ? classes.merge : ''} ${
-        isMoved && !isMerged ? classes.slide : ''
-      }`}
+      ref={tileRef}
+      className={`${classes.container} ${isMerged ? classes.merge : ''}`}
       style={containerStyle}
     >
       <Text className={classes.text} style={textStyle}>
