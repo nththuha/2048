@@ -1,5 +1,5 @@
 import { INITIAL_TILES, SIZE, SWIPE_THRESHOLD, WINNING_TILE } from '@/configs'
-import { BoardProps, Direction, NullNumber, Position, TileProps } from '@/types'
+import { BoardProps, Direction, Position, TileProps } from '@/types'
 import { useHotkeys } from '@mantine/hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
@@ -12,27 +12,27 @@ export function use2048Game() {
     if (emptyTiles.length > 0) {
       const [row, col] = emptyTiles[Math.floor(Math.random() * emptyTiles.length)]
       const value = Math.random() < 0.9 ? 2 : 4
-      board[row][col] = value
-      return { id: uuidv4(), position: [row, col], value }
+      return { id: uuidv4(), position: [row, col], value, isMerged: false }
     }
     return null
   }, [])
 
   const initialize = useCallback(() => {
-    const newBoard: BoardProps = Array.from({ length: SIZE }, () => Array(SIZE).fill(null))
-    const initialTiles: TileProps[] = []
+    const board: BoardProps = Array.from({ length: SIZE }, () => Array(SIZE).fill(null))
+    const tiles: Record<string, TileProps> = {}
     Array.from({ length: INITIAL_TILES }).forEach(() => {
-      const tile = addRandomTile(newBoard)
+      const tile = addRandomTile(board)
       if (tile) {
-        initialTiles.push(tile)
+        board[tile.position[0]][tile.position[1]] = tile.id
+        tiles[tile.id] = tile
       }
     })
-    return { board: newBoard, tiles: initialTiles }
+    return { board, tiles }
   }, [addRandomTile])
 
   const initialState = useRef(initialize()).current
   const [board, setBoard] = useState<BoardProps>(initialState.board)
-  const [tiles, setTiles] = useState<TileProps[]>(initialState.tiles)
+  const [tiles, setTiles] = useState<Record<string, TileProps>>(initialState.tiles)
   const [score, setScore] = useState(0)
   const [bestScore, setBestScore] = useState(0)
   const [gameOver, setGameOver] = useState<boolean>(false)
@@ -69,8 +69,7 @@ export function use2048Game() {
       let newBoard = board.map((row) => [...row])
       let newScore = score
       let moved = false
-      const newTiles: TileProps[] = []
-      const newMergedTiles: Position[] = []
+      const newTiles: Record<string, TileProps> = {}
 
       if (direction === 'up' || direction === 'down') {
         newBoard = transpose(newBoard)
@@ -80,15 +79,17 @@ export function use2048Game() {
       }
 
       for (let i = 0; i < SIZE; i++) {
-        const row = newBoard[i].filter((val) => val !== null)
-        const newRow: NullNumber[] = []
+        const row = newBoard[i].filter((val) => val !== null) as string[]
+        const newRow: (string | null)[] = []
         let j = 0
         let colIndex = 0
+
         while (j < row.length) {
-          if (j + 1 < row.length && row[j] === row[j + 1]) {
-            const merged = row[j] ? row[j]! * 2 : null
-            newRow.push(merged)
-            newScore += merged!
+          if (j + 1 < row.length && tiles[row[j]]?.value === tiles[row[j + 1]]?.value) {
+            const mergedValue = tiles[row[j]].value * 2
+            const newTileId = uuidv4()
+            newScore += mergedValue
+
             let mergeRow = i
             let mergeCol = colIndex
             if (direction === 'down' || direction === 'right') {
@@ -99,19 +100,23 @@ export function use2048Game() {
               mergeRow = mergeCol
               mergeCol = originalRow
             }
-            newTiles.push({
-              id: uuidv4(),
+
+            newTiles[newTileId] = {
+              id: newTileId,
               position: [mergeRow, mergeCol],
-              value: merged!,
-            })
-            newMergedTiles.push([mergeRow, mergeCol])
-            if (merged === WINNING_TILE) {
+              value: mergedValue,
+              isMerged: true,
+            }
+
+            newRow.push(newTileId)
+            if (mergedValue === WINNING_TILE) {
               setWon(true)
             }
             j += 2
             colIndex++
           } else {
-            newRow.push(row[j])
+            const tileId = row[j]
+            newRow.push(tileId)
             let tileRow = i
             let tileCol = colIndex
             if (direction === 'down' || direction === 'right') {
@@ -122,25 +127,21 @@ export function use2048Game() {
               tileRow = tileCol
               tileCol = originalRow
             }
-            const existingTile = tiles.find(
-              (tile) =>
-                tile.position[0] === tileRow &&
-                tile.position[1] === tileCol &&
-                tile.value === row[j],
-            )
-            newTiles.push({
-              id: existingTile ? existingTile.id : uuidv4(),
+            newTiles[tileId] = {
+              ...tiles[tileId],
               position: [tileRow, tileCol],
-              value: row[j]!,
-            })
+              isMerged: false,
+            }
             j++
             colIndex++
           }
         }
+
         while (newRow.length < SIZE) {
           newRow.push(null)
           colIndex++
         }
+
         if (newBoard[i].join() !== newRow.join()) {
           moved = true
         }
@@ -157,8 +158,10 @@ export function use2048Game() {
       if (moved) {
         const newTile = addRandomTile(newBoard)
         if (newTile) {
-          newTiles.push(newTile)
+          newBoard[newTile.position[0]][newTile.position[1]] = newTile.id
+          newTiles[newTile.id] = newTile
         }
+
         setBoard(newBoard)
         setTiles(newTiles)
         setScore(newScore)

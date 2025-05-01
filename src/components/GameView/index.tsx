@@ -19,7 +19,7 @@ export default function GameView() {
         <NewGameButton onClick={resetGame} />
         <Instruction />
         <Board
-          tiles={tiles}
+          tiles={Object.values(tiles)}
           won={won}
           gameOver={gameOver}
           resetGame={resetGame}

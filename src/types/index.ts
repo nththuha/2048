@@ -5,7 +5,9 @@ export type TileProps = {
   id: string
   position: Position
   value: number
+  isMerged?: boolean
 }
 
+export type NullString = string | null
 export type NullNumber = number | null
-export type BoardProps = NullNumber[][]
+export type BoardProps = NullString[][]
