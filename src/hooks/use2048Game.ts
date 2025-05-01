@@ -43,17 +43,30 @@ export function use2048Game() {
     return board[0].map((_, colIndex) => board.map((row) => row[colIndex]))
   }, [])
 
-  const canMove = useCallback((board: BoardProps) => {
+  const canMove = useCallback((board: BoardProps, tiles: Record<string, TileProps>) => {
     for (let i = 0; i < SIZE; i++) {
       for (let j = 0; j < SIZE; j++) {
-        if (board[i][j] === null) {
+        const id = board[i][j]
+        const currentValue = id ? tiles[id]?.value : null
+
+        if (currentValue === null) {
           return true
         }
-        if (j < SIZE - 1 && board[i][j] === board[i][j + 1]) {
-          return true
+
+        if (j < SIZE - 1) {
+          const rightId = board[i][j + 1]
+          const rightValue = rightId ? tiles[rightId]?.value : null
+          if (currentValue === rightValue) {
+            return true
+          }
         }
-        if (i < SIZE - 1 && board[i][j] === board[i + 1][j]) {
-          return true
+
+        if (i < SIZE - 1) {
+          const downId = board[i + 1][j]
+          const downValue = downId ? tiles[downId]?.value : null
+          if (currentValue === downValue) {
+            return true
+          }
         }
       }
     }
@@ -182,12 +195,11 @@ export function use2048Game() {
           newBoard[newTile.currentPosition[0]][newTile.currentPosition[1]] = newTile.id
           newTiles[newTile.id] = { ...newTile, isMerged: false, isRemoved: false }
         }
-
         setBoard(newBoard)
         setTiles(newTiles)
         setScore(newScore)
         setBestScore(Math.max(newScore, bestScore))
-        if (!canMove(newBoard)) {
+        if (!canMove(newBoard, newTiles)) {
           setGameOver(true)
         }
       }
