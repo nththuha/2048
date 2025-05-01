@@ -27,7 +27,7 @@
   0% {
     transform: scale(1);
   }
-  75% {
+  80% {
     transform: scale(1.2);
   }
   100% {
@@ -35,15 +35,15 @@
   }
 }
 
-// .appearing {
-//   animation: appearingAnimation 0.2s ease-in-out;
-// }
+.appearing {
+  animation: appearingAnimation 0.2s ease-in-out;
+}
 
-// @keyframes appearingAnimation {
-//   0% {
-//     transform: scale(0.4);
-//   }
-//   100% {
-//     transform: scale(1);
-//   }
-// }
+@keyframes appearingAnimation {
+  0% {
+    transform: scale(0.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -1,11 +1,10 @@
-import { colors, GAP, WIDTH } from '@/configs'
+import { colors, GAP, MOVE_ANIMATION_DURATION, WIDTH } from '@/configs'
 import { Position, TileProps } from '@/types'
 import { Text } from '@mantine/core'
 import { useEffect, useRef } from 'react'
 import classes from './Tile.module.scss'
 
 export default function Tile({
-  id,
   currentPosition,
   previousPosition,
   value,
@@ -16,17 +15,15 @@ export default function Tile({
   const positionToPixels = (position: number) => GAP / 2 + position * (WIDTH + GAP)
 
   useEffect(() => {
-    if (!previousPosition || areSamePosition(currentPosition, previousPosition)) {
-      // Không có di chuyển hoặc vị trí không thay đổi
+    if (areSamePosition(currentPosition, previousPosition)) {
       return
     }
 
-    const startTop = positionToPixels(previousPosition[0])
-    const startLeft = positionToPixels(previousPosition[1])
+    const startTop = positionToPixels(previousPosition![0])
+    const startLeft = positionToPixels(previousPosition![1])
     const endTop = positionToPixels(currentPosition[0])
     const endLeft = positionToPixels(currentPosition[1])
 
-    const duration = 200 // 0.2s
     let startTime: number | null = null
 
     const animate = (timestamp: number) => {
@@ -34,7 +31,7 @@ export default function Tile({
         startTime = timestamp
       }
       const elapsed = timestamp - startTime
-      const progress = Math.min(elapsed / duration, 1)
+      const progress = Math.min(elapsed / MOVE_ANIMATION_DURATION, 1)
 
       if (tileRef.current) {
         const currentTop = startTop + (endTop - startTop) * progress
@@ -49,7 +46,6 @@ export default function Tile({
       }
     }
 
-    // Đặt vị trí ban đầu
     if (tileRef.current) {
       tileRef.current.style.top = `${startTop}px`
       tileRef.current.style.left = `${startLeft}px`
@@ -78,7 +74,7 @@ export default function Tile({
   return (
     <div
       ref={tileRef}
-      className={`${classes.container} ${isMerged ? classes.merge : ''}`}
+      className={`${classes.container} ${isMerged ? classes.merge : ''} ${!previousPosition && !isMerged ? classes.appearing : ''}`}
       style={containerStyle}
     >
       <Text className={classes.text} style={textStyle}>

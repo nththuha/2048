@@ -1,10 +1,4 @@
-import {
-  INITIAL_TILES,
-  MOVE_ANIMATION_DURATION,
-  SIZE,
-  SWIPE_THRESHOLD,
-  WINNING_TILE,
-} from '@/configs'
+import { INITIAL_TILES, SIZE, SWIPE_THRESHOLD, WINNING_TILE } from '@/configs'
 import { BoardProps, Direction, Position, TileProps } from '@/types'
 import { useHotkeys } from '@mantine/hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -196,18 +190,6 @@ export function use2048Game() {
         if (!canMove(newBoard)) {
           setGameOver(true)
         }
-
-        setTimeout(() => {
-          setTiles((prev) => {
-            const updatedTiles = { ...prev }
-            Object.keys(updatedTiles).forEach((tileId) => {
-              if (updatedTiles[tileId].isRemoved) {
-                delete updatedTiles[tileId]
-              }
-            })
-            return updatedTiles
-          })
-        }, MOVE_ANIMATION_DURATION)
       }
     },
     [addRandomTile, bestScore, board, canMove, gameOver, score, tiles, transpose, won],
