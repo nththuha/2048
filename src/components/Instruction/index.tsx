@@ -2,7 +2,7 @@ import { Text } from '@mantine/core'
 
 export default function Instruction() {
   return (
-    <Text>
+    <Text px={5}>
       <BoldText>HOW TO PLAY:</BoldText> Use <BoldText>arrow keys</BoldText> (desktop) or{' '}
       <BoldText>swipe</BoldText> (mobile) to move tiles. Same numbers{' '}
       <BoldText>merge into one!</BoldText>

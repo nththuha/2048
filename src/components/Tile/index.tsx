@@ -52,12 +52,6 @@ export default function Tile({
     }
 
     animationRef.current = requestAnimationFrame(animate)
-
-    // return () => {
-    //   if (animationRef.current) {
-    //     // cancelAnimationFrame(animationRef.current)
-    //   }
-    // }
   }, [currentPosition, previousPosition])
 
   const containerStyle: React.CSSProperties = {

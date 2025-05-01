@@ -8,7 +8,7 @@ export default function Footer() {
   }, [])
 
   return (
-    <Flex justify="space-between" align="center" w="100%">
+    <Flex justify="space-between" align="center" w="100%" px={5}>
       <Text fw="bold">Made with ❤️ by NTH Thu Hà</Text>
       <Image
         src="/github-icon.svg"
