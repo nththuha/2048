@@ -30,8 +30,9 @@ export function use2048Game() {
     return { board: newBoard, tiles: initialTiles }
   }, [addRandomTile])
 
-  const [board, setBoard] = useState<BoardProps>(initialize().board)
-  const [tiles, setTiles] = useState<TileProps[]>(initialize().tiles)
+  const initialState = useRef(initialize()).current
+  const [board, setBoard] = useState<BoardProps>(initialState.board)
+  const [tiles, setTiles] = useState<TileProps[]>(initialState.tiles)
   const [score, setScore] = useState(0)
   const [bestScore, setBestScore] = useState(0)
   const [gameOver, setGameOver] = useState<boolean>(false)
@@ -68,6 +69,7 @@ export function use2048Game() {
       let newBoard = board.map((row) => [...row])
       let newScore = score
       let moved = false
+      const newTiles: TileProps[] = []
       const newMergedTiles: Position[] = []
 
       if (direction === 'up' || direction === 'down') {
@@ -81,13 +83,14 @@ export function use2048Game() {
         const row = newBoard[i].filter((val) => val !== null)
         const newRow: NullNumber[] = []
         let j = 0
+        let colIndex = 0
         while (j < row.length) {
           if (j + 1 < row.length && row[j] === row[j + 1]) {
             const merged = row[j] ? row[j]! * 2 : null
             newRow.push(merged)
             newScore += merged!
             let mergeRow = i
-            let mergeCol = newRow.length - 1
+            let mergeCol = colIndex
             if (direction === 'down' || direction === 'right') {
               mergeCol = SIZE - 1 - mergeCol
             }
@@ -96,18 +99,47 @@ export function use2048Game() {
               mergeRow = mergeCol
               mergeCol = originalRow
             }
+            newTiles.push({
+              id: uuidv4(),
+              position: [mergeRow, mergeCol],
+              value: merged!,
+            })
             newMergedTiles.push([mergeRow, mergeCol])
             if (merged === WINNING_TILE) {
               setWon(true)
             }
             j += 2
+            colIndex++
           } else {
             newRow.push(row[j])
+            let tileRow = i
+            let tileCol = colIndex
+            if (direction === 'down' || direction === 'right') {
+              tileCol = SIZE - 1 - tileCol
+            }
+            if (direction === 'up' || direction === 'down') {
+              const originalRow = tileRow
+              tileRow = tileCol
+              tileCol = originalRow
+            }
+            const existingTile = tiles.find(
+              (tile) =>
+                tile.position[0] === tileRow &&
+                tile.position[1] === tileCol &&
+                tile.value === row[j],
+            )
+            newTiles.push({
+              id: existingTile ? existingTile.id : uuidv4(),
+              position: [tileRow, tileCol],
+              value: row[j]!,
+            })
             j++
+            colIndex++
           }
         }
         while (newRow.length < SIZE) {
           newRow.push(null)
+          colIndex++
         }
         if (newBoard[i].join() !== newRow.join()) {
           moved = true
@@ -123,17 +155,20 @@ export function use2048Game() {
       }
 
       if (moved) {
-        addRandomTile(newBoard)
+        const newTile = addRandomTile(newBoard)
+        if (newTile) {
+          newTiles.push(newTile)
+        }
         setBoard(newBoard)
+        setTiles(newTiles)
         setScore(newScore)
         setBestScore(Math.max(newScore, bestScore))
         if (!canMove(newBoard)) {
           setGameOver(true)
         }
-        setTimeout(() => {}, 200)
       }
     },
-    [addRandomTile, bestScore, board, canMove, gameOver, score, transpose, won],
+    [addRandomTile, bestScore, board, canMove, gameOver, score, tiles, transpose, won],
   )
 
   useHotkeys([
@@ -186,8 +221,9 @@ export function use2048Game() {
   }, [move])
 
   const resetGame = useCallback(() => {
-    setBoard(initialize().board)
-    setTiles(initialize().tiles)
+    const { board, tiles } = initialize()
+    setBoard(board)
+    setTiles(tiles)
     setScore(0)
     setGameOver(false)
     setWon(false)
@@ -199,7 +235,6 @@ export function use2048Game() {
   }, [])
 
   return {
-    board,
     tiles,
     score,
     bestScore,

@@ -1,16 +1,21 @@
 import { SIZE } from '@/configs'
-import { use2048Game } from '@/hooks/use2048Game'
 import { TileProps } from '@/types'
 import Message from '../Message'
 import Tile from '../Tile'
 import classes from './Board.module.scss'
 
-export default function Board() {
-  const { tiles, won, gameOver } = use2048Game()
+type BoardProps = {
+  tiles: TileProps[]
+  won: boolean
+  gameOver: boolean
+  resetGame: () => void
+  continueGame: () => void
+}
 
+export default function Board({ tiles, won, gameOver, resetGame, continueGame }: BoardProps) {
   return (
     <div className={classes.container}>
-      {(gameOver || won) && <Message />}
+      {(gameOver || won) && <Message won={won} resetGame={resetGame} continueGame={continueGame} />}
 
       <div className={classes.tiles}>
         {tiles.map((tile: TileProps, index) => (

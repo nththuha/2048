@@ -1,11 +1,12 @@
-import { use2048Game } from '@/hooks/use2048Game'
 import { Button } from '@mantine/core'
 
-export default function NewGameButton() {
-  const { resetGame } = use2048Game()
+type NewGameButtonProps = {
+  onClick: () => void
+}
 
+export default function NewGameButton({ onClick }: NewGameButtonProps) {
   return (
-    <Button fullWidth size="md" fw="bold" onClick={resetGame}>
+    <Button fullWidth size="md" fw="bold" onClick={onClick}>
       New Game
     </Button>
   )

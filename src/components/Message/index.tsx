@@ -1,10 +1,13 @@
-import { use2048Game } from '@/hooks/use2048Game'
 import { Button, Text } from '@mantine/core'
 import classes from './Message.module.scss'
 
-export default function Message() {
-  const { won, resetGame, continueGame } = use2048Game()
+type MessageProps = {
+  won: boolean
+  resetGame: () => void
+  continueGame: () => void
+}
 
+export default function Message({ won, resetGame, continueGame }: MessageProps) {
   return (
     <div className={classes.container}>
       <Text className={classes.text}>{won ? 'You win!' : 'Game over!'}</Text>

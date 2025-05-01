@@ -1,10 +1,12 @@
-import { use2048Game } from '@/hooks/use2048Game'
 import { Flex, SimpleGrid, Text } from '@mantine/core'
 import classes from './Score.module.scss'
 
-export default function Score() {
-  const { score, bestScore } = use2048Game()
+type ScoreProps = {
+  score: number
+  bestScore: number
+}
 
+export default function Score({ score, bestScore }: ScoreProps) {
   return (
     <SimpleGrid cols={2} spacing="xs" w="100%" mt={-16}>
       <Item label="Score" score={score} />
