@@ -12,7 +12,7 @@ export function use2048Game() {
     if (emptyTiles.length > 0) {
       const [row, col] = emptyTiles[Math.floor(Math.random() * emptyTiles.length)]
       const value = Math.random() < 0.9 ? 2 : 4
-      return { id: uuidv4(), position: [row, col], value, isMerged: false }
+      return { id: uuidv4(), currentPosition: [row, col], value, isMerged: false, isRemoved: false }
     }
     return null
   }, [])
@@ -23,7 +23,7 @@ export function use2048Game() {
     Array.from({ length: INITIAL_TILES }).forEach(() => {
       const tile = addRandomTile(board)
       if (tile) {
-        board[tile.position[0]][tile.position[1]] = tile.id
+        board[tile.currentPosition[0]][tile.currentPosition[1]] = tile.id
         tiles[tile.id] = tile
       }
     })
@@ -103,9 +103,28 @@ export function use2048Game() {
 
             newTiles[newTileId] = {
               id: newTileId,
-              position: [mergeRow, mergeCol],
+              currentPosition: [mergeRow, mergeCol],
               value: mergedValue,
               isMerged: true,
+              isRemoved: false,
+            }
+
+            const tileId1 = row[j]
+            newTiles[tileId1] = {
+              ...tiles[tileId1],
+              currentPosition: [mergeRow, mergeCol],
+              previousPosition: tiles[tileId1].currentPosition,
+              isMerged: false,
+              isRemoved: true,
+            }
+
+            const tileId2 = row[j + 1]
+            newTiles[tileId2] = {
+              ...tiles[tileId2],
+              previousPosition: tiles[tileId2].currentPosition,
+              currentPosition: [mergeRow, mergeCol],
+              isMerged: false,
+              isRemoved: true,
             }
 
             newRow.push(newTileId)
@@ -129,8 +148,10 @@ export function use2048Game() {
             }
             newTiles[tileId] = {
               ...tiles[tileId],
-              position: [tileRow, tileCol],
+              previousPosition: tiles[tileId].currentPosition,
+              currentPosition: [tileRow, tileCol],
               isMerged: false,
+              isRemoved: false,
             }
             j++
             colIndex++
@@ -158,8 +179,8 @@ export function use2048Game() {
       if (moved) {
         const newTile = addRandomTile(newBoard)
         if (newTile) {
-          newBoard[newTile.position[0]][newTile.position[1]] = newTile.id
-          newTiles[newTile.id] = newTile
+          newBoard[newTile.currentPosition[0]][newTile.currentPosition[1]] = newTile.id
+          newTiles[newTile.id] = { ...newTile, isMerged: false, isRemoved: false }
         }
 
         setBoard(newBoard)
@@ -169,6 +190,18 @@ export function use2048Game() {
         if (!canMove(newBoard)) {
           setGameOver(true)
         }
+
+        // setTimeout(() => {
+        //   setTiles((prev) => {
+        //     const updatedTiles = { ...prev }
+        //     Object.keys(updatedTiles).forEach((tileId) => {
+        //       if (updatedTiles[tileId].isRemoved) {
+        //         delete updatedTiles[tileId]
+        //       }
+        //     })
+        //     return updatedTiles
+        //   })
+        // }, MOVE_ANIMATION_DURATION)
       }
     },
     [addRandomTile, bestScore, board, canMove, gameOver, score, tiles, transpose, won],

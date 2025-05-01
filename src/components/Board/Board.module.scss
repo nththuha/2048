@@ -21,7 +21,7 @@
 }
 
 .tiles {
-  position: absolute;
+  position: relative;
   z-index: 2;
   margin: calc(var(--pixel-size) * 0.5);
   left: 0;

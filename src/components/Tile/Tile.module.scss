@@ -18,14 +18,14 @@
 }
 
 .merge {
-  animation: mergeAnimation 0.2s ease-in-out;
+  animation: mergeAnimation 0.25s ease-in-out;
 }
 
 @keyframes mergeAnimation {
   0% {
     transform: scale(1);
   }
-  50% {
+  75% {
     transform: scale(1.2);
   }
   100% {

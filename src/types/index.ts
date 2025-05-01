@@ -3,9 +3,11 @@ export type Direction = 'up' | 'down' | 'left' | 'right'
 
 export type TileProps = {
   id: string
-  position: Position
+  currentPosition: Position
+  previousPosition?: Position
   value: number
   isMerged?: boolean
+  isRemoved?: boolean
 }
 
 export type NullString = string | null
