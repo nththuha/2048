@@ -7,4 +7,7 @@
     "source.addMissingImports": "explicit",
     "source.removeUnusedImports": "explicit"
   },
+  "cSpell.words": [
+    "uuidv"
+  ],
 }
