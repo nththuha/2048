@@ -17,6 +17,7 @@ Play it directly in the browser with smooth animations and responsive design.
 - Your goal is to reach the **2048 tile**!
 
 ### 📸 Gameplay Preview
+<img width="1512" alt="image" src="https://github.com/user-attachments/assets/5820a15e-7fcf-4cd4-b642-cce2ba86a652" />
 
 
 ## 🚀 Run Locally
