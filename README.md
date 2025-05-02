@@ -3,11 +3,9 @@
 A simple and modern 2048 game built with **React** and **TypeScript**, using **Vite** for fast development.
 Play it directly in the browser with smooth animations and responsive design.
 
-
 ## 🌐 Live Demo
 
 👉 [Play Now](https://1024-2048.vercel.app/)
-
 
 ## 🕹️ How to Play
 
@@ -17,15 +15,15 @@ Play it directly in the browser with smooth animations and responsive design.
 - Your goal is to reach the **2048 tile**!
 
 ### 📸 Gameplay Preview
-<img width="1512" alt="image" src="https://github.com/user-attachments/assets/5820a15e-7fcf-4cd4-b642-cce2ba86a652" />
 
+<img width="1512" alt="image" src="https://github.com/user-attachments/assets/5820a15e-7fcf-4cd4-b642-cce2ba86a652" />
 
 ## 🚀 Run Locally
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/2048-game.git
-cd 2048-game
+git clone git@github.com:nththuha/2048.git
+cd 2048
 
 # Install dependencies
 yarn install
