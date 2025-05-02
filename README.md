@@ -3,13 +3,11 @@
 A simple and modern 2048 game built with **React** and **TypeScript**, using **Vite** for fast development.
 Play it directly in the browser with smooth animations and responsive design.
 
----
 
 ## 🌐 Live Demo
 
 👉 [Play Now](https://1024-2048.vercel.app/)
 
----
 
 ## 🕹️ How to Play
 
@@ -20,9 +18,6 @@ Play it directly in the browser with smooth animations and responsive design.
 
 ### 📸 Gameplay Preview
 
-(./screenshot-desktop.png)
-
----
 
 ## 🚀 Run Locally
 
