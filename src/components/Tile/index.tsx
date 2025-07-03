@@ -62,7 +62,7 @@ export default function Tile({
   }
 
   const textStyle = {
-    color: value && value <= 4 ? 'var(--text-color)' : 'var(--secondary-text-color)',
+    color: value && value <= 4 ? 'var(--text-color)' : 'var(--secondary-text)',
   }
 
   return (

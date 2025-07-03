@@ -29,12 +29,12 @@ export const theme: MantineThemeOverride = createTheme({
 // https://mantine.dev/styles/css-variables/#css-variables-resolver
 export const resolver: CSSVariablesResolver = (theme) => ({
   variables: {
-    '--primary-background': '#FAF8EF',
-    '--secondary-background': '#BBAC9F',
-    '--cell-background': '#CDBFB3',
-    '--secondary-text-color': '#FEF1E8',
-    '--label-color': '#EEE3DA',
-    '--score-label-color': 'white',
+    '--primary-bg': '#FAF8EF',
+    '--secondary-bg': '#BBAC9F',
+    '--cell-bg': '#CDBFB3',
+    '--secondary-text': '#FEF1E8',
+    '--label': '#EEE3DA',
+    '--score': 'white',
     '--tile-size': `${WIDTH}px`,
     '--tile-gap': `${GAP}px`,
   },

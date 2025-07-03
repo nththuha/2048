@@ -1,5 +1,5 @@
 .itemContainer {
-  background-color: var(--secondary-background);
+  background-color: var(--secondary-bg);
   border-radius: 12px;
   align-items: center;
   justify-content: space-between;
@@ -9,12 +9,12 @@
 .label {
   font-size: 14px;
   font-weight: bold;
-  color: var(--label-color);
+  color: var(--label);
   line-height: normal;
 }
 
 .score {
-  color: var(--score-label-color);
+  color: var(--score);
   font-weight: bold;
   font-size: 14px;
 }
