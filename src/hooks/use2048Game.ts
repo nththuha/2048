@@ -141,7 +141,7 @@ export function use2048Game() {
             }
 
             newRow.push(newTileId)
-            if (mergedValue === WINNING_TILE) {
+            if (mergedValue === WINNING_TILE && !won) {
               setWon(true)
             }
             j += 2
