@@ -37,6 +37,7 @@ export function use2048Game() {
   const [bestScore, setBestScore] = useState(0)
   const [gameOver, setGameOver] = useState(false)
   const [won, setWon] = useState(false)
+  const [hasWon, setHasWon] = useState(false)
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
 
   const transpose = useCallback((board: BoardProps) => {
@@ -141,7 +142,8 @@ export function use2048Game() {
             }
 
             newRow.push(newTileId)
-            if (mergedValue === WINNING_TILE && !won) {
+            if (mergedValue === WINNING_TILE && !hasWon) {
+              setHasWon(true)
               setWon(true)
             }
             j += 2
