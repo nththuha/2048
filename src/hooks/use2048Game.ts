@@ -206,7 +206,7 @@ export function use2048Game() {
         }
       }
     },
-    [addRandomTile, bestScore, board, canMove, gameOver, score, tiles, transpose, won],
+    [addRandomTile, bestScore, board, canMove, gameOver, hasWon, score, tiles, transpose, won],
   )
 
   useHotkeys([
