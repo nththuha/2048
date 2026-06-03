@@ -18,8 +18,8 @@ export default function Board({ tiles, won, gameOver, resetGame, continueGame }:
       {(gameOver || won) && <Message won={won} resetGame={resetGame} continueGame={continueGame} />}
 
       <div className={classes.tiles}>
-        {tiles.map((tile: TileProps, index) => (
-          <Tile key={index} {...tile} />
+        {tiles.map((tile: TileProps) => (
+          <Tile key={tile.id} {...tile} />
         ))}
       </div>
 

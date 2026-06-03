@@ -1,8 +1,16 @@
-import { INITIAL_TILES, SIZE, SWIPE_THRESHOLD, WINNING_TILE } from '@/configs'
+import {
+  INITIAL_TILES,
+  MOVE_ANIMATION_DURATION,
+  SIZE,
+  SWIPE_THRESHOLD,
+  WINNING_TILE,
+} from '@/configs'
 import { BoardProps, Direction, Position, TileProps } from '@/types'
 import { useHotkeys } from '@mantine/hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+
+const ANIMATION_LOCK_MS = Math.max(MOVE_ANIMATION_DURATION, 50)
 
 export function use2048Game() {
   const addRandomTile = useCallback((board: BoardProps): TileProps | null => {
@@ -39,6 +47,7 @@ export function use2048Game() {
   const [won, setWon] = useState(false)
   const [hasWon, setHasWon] = useState(false)
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
+  const isAnimating = useRef(false)
 
   const transpose = useCallback((board: BoardProps) => {
     return board[0].map((_, colIndex) => board.map((row) => row[colIndex]))
@@ -76,9 +85,14 @@ export function use2048Game() {
 
   const move = useCallback(
     (direction: Direction) => {
-      if (gameOver || won) {
+      if (gameOver || won || isAnimating.current) {
         return
       }
+
+      isAnimating.current = true
+      setTimeout(() => {
+        isAnimating.current = false
+      }, ANIMATION_LOCK_MS)
 
       let newBoard = board.map((row) => [...row])
       let newScore = score
