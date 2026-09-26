@@ -279,6 +279,7 @@ export function use2048Game() {
     setScore(0)
     setGameOver(false)
     setWon(false)
+    setHasWon(false)
   }, [initialize])
 
   const continueGame = useCallback(() => {
